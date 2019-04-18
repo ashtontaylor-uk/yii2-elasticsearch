@@ -181,11 +181,11 @@ class Connection extends Component
         }
 
         foreach ($nodes as $key => &$node) {
-            // Make sure that nodes have an 'http_address' property, which is not the case if you're using AWS
-            // Elasticsearch service (at least as of Oct., 2015). - TO BE VERIFIED
-            // Temporary workaround - simply ignore all invalid nodes
             if (!isset($node['http']['publish_address'])) {
-                unset($nodes[$key]);
+                if (!isset($node['http'])) {
+                    $node['http'] = [];
+                }
+                $node['http']['publish_address'] = $host;
             }
             $node['http_address'] = $node['http']['publish_address'];
 
